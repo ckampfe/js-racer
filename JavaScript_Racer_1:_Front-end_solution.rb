@@ -1,0 +1,1 @@
+# Solution for Challenge: JavaScript Racer 1: Front-end. Started 2013-11-04T16:49:06+00:00
