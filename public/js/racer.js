@@ -38,8 +38,6 @@ function winnerDisplay(player) {
   $("body").append("<h1>" + player + " is the glorious winnerCheckrrr!!!1111</h1>");
 }
 
-/*function sendWinnerTime(winner, time) {
-  $.post(
-
-
-}*/
+function sendWinnerTime(winner, time) {
+  $.post( "/winner", { "winner": winner, "time": time } )
+}
