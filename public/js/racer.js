@@ -39,5 +39,11 @@ function winnerDisplay(player) {
 }
 
 function sendWinnerInfo(winner, time) {
-  $.post( "/winner", { "winner": winner, "time": time } )
+  // currently ignoring server response
+  $.post( "/winner",
+          { "winner": winner, "time": time },
+          function(response) {
+            console.log(response);
+          }
+        )
 }
