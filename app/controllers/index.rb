@@ -8,29 +8,32 @@ post '/users' do
     return 'Both players must have nicknames'
   end
 
-  users = [ params[:nick1], params[:nick2] ]
+  users = { :player_1 => params[:nick1],
+            :player_2 => params[:nick2] }
 
-  for user in users do
-    if Player.where("nickname = ?", user).count > 0
+  users.each_pair do |player, player_name|
+    if Player.where("nickname = ?", player_name).count > 0
       return "#{user} invalid. pick another another name"
     end
-  end
-
-  players = []
-
-  for user in users do
-    players << Player.create(:nickname => user)
   end
 
   # if successful, create a new game and send players to
   # erb :racer
 
-  # g = Game.create
+  @g = Game.create
+
+  for user in users do
+    g.players << Player.create(:nickname => user)
+  end
 
   erb :racer
 end
 
 post '/winner' do
   # log winner into game row
+  @g[:winner_id] = Player.find_by_nickname(params[:winner]).id
+  puts @g
   # log winning time into game row
+  @g[:winning_time] = params[:winning_time]
+  puts @g
 end
