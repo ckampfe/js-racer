@@ -5,14 +5,12 @@ $(document).ready(function(){
     if (wonYet !== true) {
       switch (event.which) {
         case 80:
-          turn("player1");
+          mover("player1");
+          break;
         case 81:
-          turn("player2");
+          mover("player2");
+          break;
       }
-    }
-
-    function turn(player) {
-      mover(player);
     }
   });
 });
@@ -39,11 +37,15 @@ function winnerDisplay(player) {
 }
 
 function sendWinnerInfo(winner, time) {
-  // currently ignoring server response
+ console.log(time); 
   $.post( "/winner",
-          { "winner": winner, "time": time },
+          { "winner": winner,
+            "time": time,
+            "player1": $("#player1_strip").attr("data-nick"),
+            "player2": $("#player2_strip").attr("data-nick"),
+            "gameId": $(".racer_table").attr("data-game-id") },
           function(response) {
-            console.log(response);
+            $("#stats").html(response);
           }
         )
 }
