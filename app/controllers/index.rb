@@ -1,5 +1,4 @@
 get '/' do
-  # Look in app/views/index.erb
   erb :index
 end
 
@@ -9,13 +8,24 @@ post '/users' do
     return 'Both players must have nicknames'
   end
 
-  if Player.create(:nickname => params[:nick1]).invalid?
-    return 'Player 1 name invalid. Enter another name.'
+  users = [ params[:nick1], params[:nick2] ]
+
+  for user in users do
+    if Player.where("nickname = ?", user).count > 0
+      return "#{user} invalid. pick another another name"
+    end
   end
 
-  if Player.create(:nickname => params[:nick2]).invalid?
-    return 'Player 2 name invalid. Enter another name.'
+  players = []
+
+  for user in users do
+    players << Player.create(:nickname => user)
   end
+
+  # if successful, create a new game and send players to
+  # erb :racer
+
+  # g = Game.create
 
   erb :racer
 end
