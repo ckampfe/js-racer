@@ -1,3 +1,4 @@
+var startTime = Date.now();
 var wonYet = false;
 $(document).ready(function(){
   $(document).on("keyup", function(event) {
@@ -12,10 +13,6 @@ $(document).ready(function(){
 
     function turn(player) {
       mover(player);
-      if (winnerCheck(player) === true) {
-        wonYet = true;
-        winnerDisplay(player);
-      }
     }
   });
 });
@@ -23,17 +20,26 @@ $(document).ready(function(){
 function mover(player) {
   if (!($("#" + player + "_strip > td").filter(":last").is(".active"))) {
     $("#" + player + "_strip > td.active").removeClass("active").next("td").addClass("active");
+  } else {
+    wonYet = true;
+    winnerDisplay(player);
+    var winTime = startTime - Date.now();
+    sendWinnerTime(player, winTime);
   }
 }
 
 function winnerCheck(player) {
-  if ($("#" + player + "_strip td").filter(":last").is(".active")) {
-    return true;
-  }
+  if ($("#" + player + "_strip td").filter(":last").is(".active")) { return true; }
 }
 
 function winnerDisplay(player) {
   $("h1").empty();
-  $( "body").css( "background", "linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet)" );
+  $( "body").css( "background", "linear-gradient(to right, red, orange, yellow)" );
   $("body").append("<h1>" + player + " is the glorious winnerCheckrrr!!!1111</h1>");
 }
+
+/*function sendWinnerTime(winner, time) {
+  $.post(
+
+
+}*/
