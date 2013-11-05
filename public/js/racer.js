@@ -23,8 +23,8 @@ function mover(player) {
   } else {
     wonYet = true;
     winnerDisplay(player);
-    var winTime = startTime - Date.now();
-    sendWinnerTime(player, winTime);
+    var winTime = Date.now() - startTime;
+    sendWinnerInfo(player, winTime);
   }
 }
 
@@ -38,6 +38,6 @@ function winnerDisplay(player) {
   $("body").append("<h1>" + player + " is the glorious winnerCheckrrr!!!1111</h1>");
 }
 
-function sendWinnerTime(winner, time) {
+function sendWinnerInfo(winner, time) {
   $.post( "/winner", { "winner": winner, "time": time } )
 }
