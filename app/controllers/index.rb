@@ -8,32 +8,51 @@ post '/users' do
     return 'Both players must have nicknames'
   end
 
-  users = { :player_1 => params[:nick1],
-            :player_2 => params[:nick2] }
+  users = { :player1 => params[:nick1].chomp,
+            :player2 => params[:nick2].chomp }
 
-  users.each_pair do |player, player_name|
-    if Player.where("nickname = ?", player_name).count > 0
-      return "#{user} invalid. pick another another name"
-    end
-  end
+  @player1 = users[:player1]
+  @player2 = users[:player2]
+
+  puts users.inspect
+
+#  users.each_pair do |player, player_name|
+#    if Player.where("nickname = ?", users[player]).count > 0
+#      puts player_name
+#      return "#{player_name} invalid. pick another another name"
+#    end
+#  end
 
   # if successful, create a new game and send players to
   # erb :racer
 
-  @g = Game.create
+  game = Game.create
+  @game_id = game.id
 
-  for user in users do
-    g.players << Player.create(:nickname => user)
+  users.each_pair do |player, player_name|
+
+    puts Player.find_by_nickname(player_name)
+
+    begin
+      game.players << Player.create(:nickname => player_name)
+    rescue
+      game.players << Player.find_by_nickname(player_name)
+    end
   end
 
   erb :racer
 end
 
 post '/winner' do
-  # log winner into game row
-  @g[:winner_id] = Player.find_by_nickname(params[:winner]).id
-  puts @g
-  # log winning time into game row
-  @g[:winning_time] = params[:winning_time]
-  puts @g
+  if request.xhr?
+    @winner = params["#{params[:winner]}"]
+    winner_id = Player.where("nickname = ?", @winner)[0].id
+    @winner_games = Player.find(winner_id).games.count
+    game_id = params[:gameId].to_i
+    game = Game.find(game_id)
+    game.winner_id = winner_id
+    game.save
+
+    erb :_stats, :layout => false
+  end
 end
