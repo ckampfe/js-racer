@@ -19,3 +19,8 @@ post '/users' do
 
   erb :racer
 end
+
+post '/winner' do
+  # log winner into game row
+  # log winning time into game row
+end
