@@ -14,18 +14,29 @@ $(document).ready(function() {
 
   /* game prototype */
 
+  // is player at the last cell?
+  Game.prototype.lastListen = function(player) {
+    $( document ).on("keyup", function( event ) {
+      console.log("lastListen triggered");
+      console.log(player);
+      if ($("#player" + player.playerNumber + "_strip > td").filter( ":last" ).is( ".active" )) {
+        $(document).unbind("keyup")
+        aGame.won = true;
+        return true
+      } else {
+        return false;
+      }
+    });
+  }
+
   // listen for keyup events
   Game.prototype.keypressListen = function() {
     $( document ).on("keyup", function( event ) {
       switch(event.which) {
         case 80:
-          console.log("80 keypress");
-          console.log(player1.playerNumber);
           player1.move();
           break;
         case 81:
-          console.log("81 keypress");
-          console.log(player2.playerNumber);
           player2.move();
           break;
       }
@@ -35,7 +46,7 @@ $(document).ready(function() {
   // send game data to server
   Game.prototype.sendWinnerInfo = function(winner, time) {
     $.post( "/winner", { "players": { "player1": player1.nick,
-                                      "player2": player1.nick 
+                                      "player2": player2.nick
                                      },
                          "winner": winner,
                          "time": time/1000,
@@ -48,15 +59,6 @@ $(document).ready(function() {
     $( "#stats" ).html(reponse);
   }
 
-  // is player at the last cell?
-  Game.prototype.lastListen = function(player) {
-    if ($("#player" + player.playerNumber + "_strip > td").filter( ":last" ).is( ".active" )) {
-      aGame.gameOver();
-      return true;
-    } else {
-      return false;
-    }
-  }
 
   /* PLAYER */
 
@@ -72,10 +74,7 @@ $(document).ready(function() {
     $( "#player" + this.playerNumber + "_strip > td.active" ).removeClass( "active" ).next( "td" ).addClass( "active" );
   }
 
-
   aGame.keypressListen();
-  for (player of players) {
-    aGame.lastListen(player);
-  }
+  aGame.lastListen(player1);
+  aGame.lastListen(player2);
 });
-
