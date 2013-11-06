@@ -8,10 +8,9 @@ $(document).ready(function() {
 
   /* game prototype */
 
-
   // check if game is over
   Game.prototype.gameOver? = function() {
-    return this.won;
+    return this.won; //true || false
   }
 
   // end game 
@@ -33,6 +32,7 @@ $(document).ready(function() {
     }
   }
 
+  // send game data to server
   Game.prototype.sendWinnerInfo = function(winner, time) {
     var players = { "player1": $( "#player1_strip" ).attr( "data-nick" ),
                     "player2": $( "#player2_strip" ).attr( "data-nick" )
@@ -42,12 +42,13 @@ $(document).ready(function() {
                          "winner": winner,
                          "time": time/1000,
                          "gameId": $( ".racer_table" ).attr( "data-game-id" ),
+                       }, this.editDom(response));
   }
 
+  // insert response into #stats
   Game.prototype.editDom = function(response) {
     $( "#stats" ).html(reponse);
   }
-
 
 
 
@@ -60,23 +61,19 @@ $(document).ready(function() {
 
   /* player prototype */
 
+  // move player
   Player.prototype.mover = function() {
-
+    $("#" + this.name + "_strip > td.active".removeClass( "active" ).next( "td" ).addClass( "active" );
   }
 
+  // is player at the last cell?
   Player.prototype.last = function() {
-    if ($("#" + this.name + "_strip > td").filter(":last").is(".active")) {
+    if ($("#" + this.name + "_strip > td").filter( ":last" ).is( ".active" )) {
       return true;
     } else {
-
       return false;
     }
   }
-
-
-
-
-
 
 
 });
