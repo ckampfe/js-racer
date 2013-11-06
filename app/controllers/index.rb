@@ -45,6 +45,7 @@ end
 
 post '/winner' do
   if request.xhr?
+    @time = params[:time]
     @winner = params["#{params[:winner]}"]
     winner_id = Player.where("nickname = ?", @winner)[0].id
     @winner_games = Player.find(winner_id).games.count

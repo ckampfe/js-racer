@@ -40,7 +40,7 @@ function sendWinnerInfo(winner, time) {
  console.log(time); 
   $.post( "/winner",
           { "winner": winner,
-            "time": time,
+            "time": time/1000,
             "player1": $("#player1_strip").attr("data-nick"),
             "player2": $("#player2_strip").attr("data-nick"),
             "gameId": $(".racer_table").attr("data-game-id") },
